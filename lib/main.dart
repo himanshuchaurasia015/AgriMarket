@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:agrimarket/screens/home_screen.dart';
+import 'package:agrimarket/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'AgriMarket',
         theme: ThemeData(
           fontFamily: 'Roboto',
@@ -38,6 +39,6 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: HomeScreen());
+        home: SplashScreen());
   }
 }

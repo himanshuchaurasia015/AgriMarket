@@ -1,3 +1,6 @@
+import 'package:agrimarket/screens/forget_password_screen.dart';
+import 'package:agrimarket/screens/nav_bar.dart';
+import 'package:agrimarket/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,8 +11,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Widget customTextField(String hintText) {
+  bool isPassword = false;
+
+  Widget customTextField(String hintText, {bool isPassword = false}) {
     return TextField(
+      obscureText: isPassword,
+      obscuringCharacter: '•',
       decoration: InputDecoration(
         hintText: hintText,
         focusedBorder: OutlineInputBorder(
@@ -29,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Padding(
-        padding: const EdgeInsets.only(top: 150),
+        padding: const EdgeInsets.only(top: 170),
         child: Container(
           height: 712,
           decoration: BoxDecoration(
@@ -52,10 +59,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 50),
                       customTextField("Email/Phone"),
                       SizedBox(height: 16),
-                      customTextField("Password"),
+                      customTextField("Password", isPassword: true),
                       Padding(
                         padding: const EdgeInsets.only(left: 230),
-                        child: Text("Forget Password"),
+                        child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ForgetPasswordScreen()),
+                              );
+                            },
+                            child: Text("Forget Password")),
                       ),
                       SizedBox(height: 50),
                       ElevatedButton(
@@ -66,13 +82,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
                               fixedSize: WidgetStatePropertyAll(Size(350, 54))),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => NavBar()),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
                           child: Text("Log in",
                               style: TextStyle(
                                   fontFamily: 'lato',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white))),
-                      Text("Don’t have an account? Sign up")
+                      InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignupScreen()));
+                          },
+                          child: Text("Don’t have an account? Sign up"))
                     ],
                   ),
                 )

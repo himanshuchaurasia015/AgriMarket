@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agrimarket/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class TypeScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _TypeScreenState extends State<TypeScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         body: Center(
-          child: Container(
+          child: SizedBox(
             height: 600,
             width: 350,
             // color: Colors.white,
@@ -29,47 +30,63 @@ class _TypeScreenState extends State<TypeScreen> {
                       fontWeight: FontWeight.bold,
                       fontFamily: 'roboto'),
                 ),
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(34)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image.asset("assets/images/farmer.png"),
-                      Text(
-                        "Farmer",
-                        style: TextStyle(
-                            fontSize: 48,
-                            fontFamily: 'lato',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )
-                    ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                  },
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(34)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset("assets/images/farmer.png"),
+                        Text(
+                          "Farmer",
+                          style: TextStyle(
+                              fontSize: 48,
+                              fontFamily: 'lato',
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(34)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image.asset(
-                        "assets/images/buyer.png",
-                        width: 190,
-                      ),
-                      Text(
-                        "Buyer",
-                        style: TextStyle(
-                            fontSize: 48,
-                            fontFamily: 'lato',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )
-                    ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                  },
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(34)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset(
+                          "assets/images/buyer.png",
+                          width: 190,
+                        ),
+                        Text(
+                          "Buyer",
+                          style: TextStyle(
+                              fontSize: 48,
+                              fontFamily: 'lato',
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

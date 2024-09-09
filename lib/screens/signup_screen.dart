@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agrimarket/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -10,8 +11,15 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  Widget customTextField(String hintText) {
+  bool isPassword = false;
+  bool numPad = false;
+
+  Widget customTextField(String hintText,
+      {bool isPassword = false, bool numPad = false}) {
     return TextField(
+      obscureText: isPassword,
+      obscuringCharacter: '•',
+      keyboardType: numPad ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         hintText: hintText,
         focusedBorder: OutlineInputBorder(
@@ -50,15 +58,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Column(
                   children: [
                     SizedBox(height: 30),
-                    customTextField("First Name"),
+                    customTextField("Name"),
                     SizedBox(height: 16),
-                    customTextField("Last Name"),
+                    customTextField("Email"),
                     SizedBox(height: 16),
-                    customTextField("Email/Phone"),
+                    customTextField("Phone", numPad: true),
                     SizedBox(height: 16),
-                    customTextField("Password"),
+                    customTextField("Password", isPassword: true),
                     SizedBox(height: 16),
-                    customTextField("Re-Enter password"),
+                    customTextField("Re-Enter password", isPassword: true),
                     SizedBox(height: 30),
                     ElevatedButton(
                         style: ButtonStyle(
@@ -68,13 +76,27 @@ class _SignupScreenState extends State<SignupScreen> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5))),
                             fixedSize: WidgetStatePropertyAll(Size(350, 54))),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ));
+                        },
                         child: Text("Create Account",
                             style: TextStyle(
                                 fontFamily: 'lato',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white))),
-                    Text("Already have an account? Sign In")
+                    InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ));
+                        },
+                        child: Text("Already have an account? Sign In"))
                   ],
                 ),
               )

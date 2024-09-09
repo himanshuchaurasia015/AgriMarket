@@ -1,3 +1,4 @@
+import 'package:agrimarket/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -12,10 +13,16 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_rounded,
-          // color: Theme.of(context).colorScheme.primary,
-          size: 40,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
+          },
+          child: Icon(
+            Icons.arrow_back_rounded,
+            // color: Theme.of(context).colorScheme.primary,
+            size: 40,
+          ),
         ),
         title: Center(
           child: Text(
@@ -65,7 +72,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       borderRadius: BorderRadius.circular(5))),
                   fixedSize: WidgetStatePropertyAll(Size(350, 54))),
               onPressed: () {},
-              child: Text("Log in",
+              child: Text("Send Mail",
                   style: TextStyle(
                       fontFamily: 'lato',
                       fontWeight: FontWeight.bold,
