@@ -1,9 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agrimarket/firebase_options.dart';
 import 'package:agrimarket/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  } catch (e) {
+    print("Firebase initialization error: $e");
+    // Optionally handle the error, e.g., show an error message or crash the app
+  }
   runApp(const MyApp());
 }
 

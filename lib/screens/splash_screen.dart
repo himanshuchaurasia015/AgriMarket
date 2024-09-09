@@ -2,26 +2,28 @@
 
 import 'dart:async';
 
+import 'package:agrimarket/firebase_services/splash_screenService.dart';
 import 'package:agrimarket/screens/type_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SplashService splashScreen=SplashService();
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => TypeScreen()),
-      );
-    });
+    // Timer(Duration(seconds: 2), () {
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => TypeScreen()),
+    //   );
+    // });
+    splashScreen.isLogin(context);
   }
 
   @override

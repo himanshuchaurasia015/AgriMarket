@@ -1,6 +1,7 @@
 import 'package:agrimarket/screens/forget_password_screen.dart';
 import 'package:agrimarket/screens/nav_bar.dart';
 import 'package:agrimarket/screens/signup_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,10 +12,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool isPassword = false;
 
-  Widget customTextField(String hintText, {bool isPassword = false}) {
+  Widget customTextField(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       obscuringCharacter: '•',
       decoration: InputDecoration(
@@ -28,6 +34,31 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    try {
+      // Sign in the user with Firebase Authentication
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+// print("userCredential: $userCredential");
+      // Navigate to NavBar or home screen
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => NavBar()),
+            (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
   }
 
   @override
@@ -57,54 +88,53 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       SizedBox(height: 50),
-                      customTextField("Email/Phone"),
+                      customTextField("Email/Phone", _emailController),
                       SizedBox(height: 16),
-                      customTextField("Password", isPassword: true),
+                      customTextField("Password", _passwordController, isPassword: true),
                       Padding(
                         padding: const EdgeInsets.only(left: 230),
                         child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ForgetPasswordScreen()),
-                              );
-                            },
-                            child: Text("Forget Password")),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgetPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: Text("Forget Password"),
+                        ),
                       ),
                       SizedBox(height: 50),
                       ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  Theme.of(context).colorScheme.primary),
-                              shape: WidgetStatePropertyAll(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              fixedSize: WidgetStatePropertyAll(Size(350, 54))),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => NavBar()),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                          child: Text("Log in",
-                              style: TextStyle(
-                                  fontFamily: 'lato',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white))),
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                Theme.of(context).colorScheme.primary),
+                            shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            fixedSize: WidgetStatePropertyAll(Size(350, 54))),
+                        onPressed: _login,
+                        child: Text("Log in",
+                            style: TextStyle(
+                                fontFamily: 'lato',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ),
                       InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignupScreen()));
-                          },
-                          child: Text("Don’t have an account? Sign up"))
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignupScreen(),
+                            ),
+                          );
+                        },
+                        child: Text("Don’t have an account? Sign up"),
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
