@@ -136,12 +136,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     InkWell(
                         onTap: () {
-                          _signup();
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => LoginScreen(),
-                          //     ));
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ));
                         },
                         child: Text("Already have an account? Sign In"))
                   ],
