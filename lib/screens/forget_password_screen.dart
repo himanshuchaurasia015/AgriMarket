@@ -12,7 +12,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context,

@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  final String? userType; // Accept userType in the constructor
+
+  const SignupScreen({super.key, this.userType});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -68,12 +70,12 @@ class _SignupScreenState extends State<SignupScreen> {
         'email': email,
         'phone': phone,
       });
-  print("success");
+      
       // Navigate to login screen or home screen
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => LoginScreen(userType: widget.userType), // Pass userType
         ),
       );
     } catch (e) {
@@ -121,12 +123,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(height: 30),
                     ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
+                          backgroundColor: WidgetStateProperty.all(
                               Theme.of(context).colorScheme.primary),
-                          shape: WidgetStatePropertyAll(
+                          shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5))),
-                          fixedSize: WidgetStatePropertyAll(Size(350, 54))),
+                          fixedSize: WidgetStateProperty.all(Size(350, 54))),
                       onPressed: _signup,
                       child: Text("Create Account",
                           style: TextStyle(
@@ -135,18 +137,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: Colors.white)),
                     ),
                     InkWell(
-                        onTap: () {
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ));
-                        },
-                        child: Text("Already have an account? Sign In"))
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(userType: widget.userType),
+                          ),
+                        );
+                      },
+                      child: Text("Already have an account? Sign In")
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

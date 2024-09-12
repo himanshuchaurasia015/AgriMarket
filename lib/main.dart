@@ -10,7 +10,6 @@ void main() async{
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     print("Firebase initialization error: $e");
-    // Optionally handle the error, e.g., show an error message or crash the app
   }
   runApp(const MyApp());
 }

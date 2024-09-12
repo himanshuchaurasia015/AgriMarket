@@ -1,11 +1,15 @@
 import 'package:agrimarket/screens/forget_password_screen.dart';
 import 'package:agrimarket/screens/nav_bar.dart';
 import 'package:agrimarket/screens/signup_screen.dart';
+import 'package:agrimarket/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? userType; // Define userType as a class property
+
+  const LoginScreen({super.key, this.userType}); // Assign userType to the constructor
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -42,16 +46,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Sign in the user with Firebase Authentication
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-// print("userCredential: $userCredential");
-      // Navigate to NavBar or home screen
+
+      // Store login state in shared preferences
+      var sharedPref = await SharedPreferences.getInstance();
+      sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+
+      // Navigate to the NavBar screen
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => NavBar()),
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
       );
     } catch (e) {
       // Show error message
@@ -87,10 +96,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
+                      Text(
+                        "You are logging in as a ${widget.userType ?? 'user'}", // Access the userType here
+                        style: TextStyle(fontSize: 24),
+                      ),
                       SizedBox(height: 50),
                       customTextField("Email/Phone", _emailController),
                       SizedBox(height: 16),
-                      customTextField("Password", _passwordController, isPassword: true),
+                      customTextField("Password", _passwordController,
+                          isPassword: true),
                       Padding(
                         padding: const EdgeInsets.only(left: 230),
                         child: InkWell(
@@ -107,13 +121,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 50),
                       ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
-                            shape: WidgetStatePropertyAll(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
-                            fixedSize: WidgetStatePropertyAll(Size(350, 54))),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          fixedSize: Size(350, 54),
+                        ),
                         onPressed: _login,
                         child: Text("Log in",
                             style: TextStyle(
@@ -126,7 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SignupScreen(),
+                              builder: (context) => SignupScreen(
+                                userType: widget.userType, // Pass userType here
+                              ),
                             ),
                           );
                         },

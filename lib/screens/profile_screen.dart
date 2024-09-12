@@ -1,5 +1,7 @@
 import 'dart:io'; // For File handling
 
+import 'package:agrimarket/screens/splash_screen.dart';
+import 'package:agrimarket/screens/type_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // To pick images
 import 'package:shared_preferences/shared_preferences.dart'; // For persistent storage
@@ -68,6 +70,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // Logout function to clear authentication-related data and navigate to the login screen
+  Future<void> _logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Clear only authentication-related data
+    await prefs.remove('auth_token'); // Example of clearing auth token
+    // You can add more keys if needed for login credentials
+    // Navigate to the login screen
+    var sharedPref = await SharedPreferences.getInstance();
+
+    sharedPref.setBool(SplashScreenState.KEYLOGIN, false);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => TypeScreen(), // Replace with your LoginScreen
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,10 +139,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildTextField("Language", languageController),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                _saveData(); // Save data when save button is pressed
-              },
+              onPressed: _saveData, // Save data when save button is pressed
               child: Text('Save'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _logout, // Logout and navigate to login screen
+              child: Text('Logout'),
             ),
           ],
         ),
