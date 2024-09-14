@@ -173,7 +173,7 @@ class _TestDetailsState extends State<TestDetails> {
               onPressed: _testQuality,
               child: const Text("Test Crop Quality"),
             ),
-            const SizedBox(height: 300),
+            const SizedBox(height: 0),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

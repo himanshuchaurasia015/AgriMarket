@@ -2,12 +2,14 @@
 
 import 'package:agrimarket/firebase_options.dart';
 import 'package:agrimarket/screens/splash_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-void main() async{
+import 'package:flutter/material.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     print("Firebase initialization error: $e");
   }
@@ -49,3 +51,4 @@ class MyApp extends StatelessWidget {
         home: SplashScreen());
   }
 }
+  

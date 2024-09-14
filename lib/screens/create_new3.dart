@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -96,10 +98,9 @@ class _PriceDetailsState extends State<PriceDetails> {
             borderRadius: BorderRadius.circular(14),
           ),
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly, // Allow only numbers
-          TimeFormatter(), // Custom formatter to handle time input
-        ],
+        inputFormatters: inputType == TextInputType.number
+            ? [FilteringTextInputFormatter.digitsOnly]
+            : [], // Only apply formatter to numeric fields
       ),
     );
   }
@@ -138,8 +139,8 @@ class _PriceDetailsState extends State<PriceDetails> {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly, // Allow only numbers
-              TimeFormatter(), // Custom formatter to handle time input
+              FilteringTextInputFormatter.digitsOnly,
+              TimeFormatter(), 
             ],
           ),
           actions: <Widget>[
@@ -148,13 +149,13 @@ class _PriceDetailsState extends State<PriceDetails> {
                 setState(() {
                   _selectedTimeLimit = customTimeController.text;
                 });
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text('Submit'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog without saving
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),
@@ -165,7 +166,7 @@ class _PriceDetailsState extends State<PriceDetails> {
   }
 }
 
-// Custom formatter to enforce time format HH:mm
+
 class TimeFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

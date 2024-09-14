@@ -1,5 +1,8 @@
+// ignore_for_file: library_prefixes
+
+import 'package:agrimarket/buyer/nav_bar_buyer.dart' as buyerNav;
 import 'package:agrimarket/screens/forget_password_screen.dart';
-import 'package:agrimarket/screens/nav_bar.dart';
+import 'package:agrimarket/screens/nav_bar.dart' as farmerNav;
 import 'package:agrimarket/screens/signup_screen.dart';
 import 'package:agrimarket/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,25 +10,26 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  final String? userType; // Define userType as a class property
+  final String? userType;
 
-  const LoginScreen({super.key, this.userType}); // Assign userType to the constructor
+  const LoginScreen({Key? key, this.userType}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  bool isPassword = false;
+  final _formKey = GlobalKey<FormState>();
+  bool isPasswordVisible = false;
+  bool isLoading = false;
 
   Widget customTextField(String hintText, TextEditingController controller,
       {bool isPassword = false}) {
-    return TextField(
+    return TextFormField(
       controller: controller,
-      obscureText: isPassword,
+      obscureText: isPassword && !isPasswordVisible,
       obscuringCharacter: '•',
       decoration: InputDecoration(
         hintText: hintText,
@@ -36,37 +40,94 @@ class _LoginScreenState extends State<LoginScreen> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
         ),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+              )
+            : null,
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field cannot be empty';
+        }
+        if (isPassword && value.length < 6) {
+          return 'Password must be at least 6 characters';
+        }
+        return null;
+      },
     );
   }
 
   _login() async {
+    if (_formKey.currentState?.validate() != true) {
+      return;
+    }
+
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      // Sign in the user with Firebase Authentication
       final userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Store login state in shared preferences
       var sharedPref = await SharedPreferences.getInstance();
       sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
 
-      // Navigate to the NavBar screen
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => NavBar()),
-        (Route<dynamic> route) => false,
+      if (widget.userType == "farmer") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  farmerNav.NavBar()), // Replace with actual widget
+          (Route<dynamic> route) => false,
+        );
+      } else if (widget.userType == "buyer") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  buyerNav.NavBarBuyer()), // Replace with actual widget
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid user type')),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message;
+      if (e.code == 'user-not-found') {
+        message = 'No user found for this email.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided.';
+      } else {
+        message = 'An error occurred. Please try again.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
       );
     } catch (e) {
-      // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -87,70 +148,78 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(height: 100),
-                Image.asset("assets/images/greenbg.png"),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Text(
-                        "You are logging in as a ${widget.userType ?? 'user'}", // Access the userType here
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      SizedBox(height: 50),
-                      customTextField("Email/Phone", _emailController),
-                      SizedBox(height: 16),
-                      customTextField("Password", _passwordController,
-                          isPassword: true),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 230),
-                        child: InkWell(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(height: 100),
+                  Image.asset("assets/images/greenbg.png"),
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Text(
+                          "You are logging in as a ${widget.userType ?? 'user'}",
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        SizedBox(height: 50),
+                        customTextField("Email/Phone", _emailController),
+                        SizedBox(height: 16),
+                        customTextField("Password", _passwordController,
+                            isPassword: true),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 230),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgetPasswordScreen(),
+                                ),
+                              );
+                            },
+                            child: Text("Forget Password"),
+                          ),
+                        ),
+                        SizedBox(height: 50),
+                        isLoading
+                            ? CircularProgressIndicator()
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  fixedSize: Size(350, 54),
+                                ),
+                                onPressed: _login,
+                                child: Text(
+                                  "Log in",
+                                  style: TextStyle(
+                                      fontFamily: 'lato',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                        InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ForgetPasswordScreen(),
+                                builder: (context) => SignupScreen(
+                                  userType: widget.userType,
+                                ),
                               ),
                             );
                           },
-                          child: Text("Forget Password"),
+                          child: Text("Don’t have an account? Sign up"),
                         ),
-                      ),
-                      SizedBox(height: 50),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          fixedSize: Size(350, 54),
-                        ),
-                        onPressed: _login,
-                        child: Text("Log in",
-                            style: TextStyle(
-                                fontFamily: 'lato',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignupScreen(
-                                userType: widget.userType, // Pass userType here
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text("Don’t have an account? Sign up"),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

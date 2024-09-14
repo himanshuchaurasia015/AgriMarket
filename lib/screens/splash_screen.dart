@@ -48,13 +48,13 @@ class SplashScreenState extends State<SplashScreen> {
             MaterialPageRoute(builder: (context) => NavBar()),
           );
         } else {
-          Navigator.pushReplacement(
+          Navigator.pop(
             context,
             MaterialPageRoute(builder: (context) => TypeScreen()),
           );
         }
       } else {
-        Navigator.pushReplacement(
+        Navigator.pop(
           context,
           MaterialPageRoute(builder: (context) => TypeScreen()),
         );

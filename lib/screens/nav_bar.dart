@@ -15,7 +15,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final controller = Get.put(FarmerNavigationController());
     return Scaffold(
         appBar: AppBar(
           title: Image.asset('assets/images/blackbg.png',
@@ -92,7 +92,7 @@ class NavBar extends StatelessWidget {
   }
 }
 
-class NavigationController extends GetxController {
+class FarmerNavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
   final screens = [
