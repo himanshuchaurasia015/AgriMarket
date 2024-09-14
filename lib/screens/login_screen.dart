@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  farmerNav.NavBar()), // Replace with actual widget
+                  farmerNav.NavBar()), 
           (Route<dynamic> route) => false,
         );
       } else if (widget.userType == "buyer") {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  buyerNav.NavBarBuyer()), // Replace with actual widget
+                  buyerNav.NavBarBuyer()), 
           (Route<dynamic> route) => false,
         );
       } else {

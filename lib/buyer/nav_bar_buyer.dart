@@ -103,7 +103,7 @@ class BuyerNavigationController extends GetxController {
   final screens = [
     HomeScreen(),
     Container(
-      color: Colors.red,
+      color: Colors.black,
     ),
     WalletScreen(),
     HistoryScreen(),
