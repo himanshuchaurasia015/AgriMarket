@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:agrimarket/screens/nav_bar.dart';
+import 'package:agrimarket/screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -89,18 +91,20 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                width: BouncingScrollSimulation.maxSpringTransferVelocity,
-                child: Text(
-                  "Wallet Balance",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Lato',
-                      color: Theme.of(context).colorScheme.primary),
+              
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  width: BouncingScrollSimulation.maxSpringTransferVelocity,
+                  child: Text(
+                    "Wallet Balance",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Lato',
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
                 ),
-              ),
+              
             ),
             SizedBox(height: 20),
             Padding(

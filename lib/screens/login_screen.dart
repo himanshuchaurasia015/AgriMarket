@@ -5,6 +5,7 @@ import 'package:agrimarket/screens/forget_password_screen.dart';
 import 'package:agrimarket/screens/nav_bar.dart' as farmerNav;
 import 'package:agrimarket/screens/signup_screen.dart';
 import 'package:agrimarket/screens/splash_screen.dart';
+import 'package:agrimarket/screens/type_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,17 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (widget.userType == "farmer") {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  farmerNav.NavBar()), // Replace with actual widget
+          MaterialPageRoute(builder: (context) => farmerNav.NavBar()),
           (Route<dynamic> route) => false,
         );
       } else if (widget.userType == "buyer") {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  buyerNav.NavBarBuyer()), // Replace with actual widget
+          MaterialPageRoute(builder: (context) => buyerNav.NavBarBuyer()),
           (Route<dynamic> route) => false,
         );
       } else {
@@ -136,8 +133,20 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TypeScreen()),
+            );
+          },
+          child: const Icon(Icons.arrow_back_rounded),
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 170),
+        padding: const EdgeInsets.only(top: 150),
         child: Container(
           height: 712,
           decoration: BoxDecoration(

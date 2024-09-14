@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:agrimarket/buyer/buy_screen.dart';
 import 'package:agrimarket/screens/history_screen.dart';
 import 'package:agrimarket/screens/home_screen.dart';
 import 'package:agrimarket/screens/notification_screen.dart';
@@ -102,9 +103,7 @@ class BuyerNavigationController extends GetxController {
 
   final screens = [
     HomeScreen(),
-    Container(
-      color: Colors.red,
-    ),
+    BuyScreen(),
     WalletScreen(),
     HistoryScreen(),
     ProfileScreen(),
