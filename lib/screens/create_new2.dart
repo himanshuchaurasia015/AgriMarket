@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
+import 'package:agrimarket/api_service.dart';
 
 class TestDetails extends StatefulWidget {
   final Map<String, dynamic> cropDetails;
@@ -94,7 +95,7 @@ class _TestDetailsState extends State<TestDetails> {
   }
 
   // Dummy test function (Replace with actual quality test logic)
-  void _testQuality() {
+  void _testQuality() async{
     if (_images.length >= 3 && _video != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Testing quality...")),
@@ -102,7 +103,9 @@ class _TestDetailsState extends State<TestDetails> {
 
       // Add the first image to the crop details
       widget.cropDetails['image'] = _images.first;
-
+      print("testing......................");
+      var response = await ApiService.uploadPhotos(_images);
+      print(response);
       // Perform any additional crop quality test logic here
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
