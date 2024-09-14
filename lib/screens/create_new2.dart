@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:agrimarket/api_service.dart';
 import 'package:agrimarket/screens/create_new3.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
-import 'package:agrimarket/api_service.dart';
 
 class TestDetails extends StatefulWidget {
   final Map<String, dynamic> cropDetails;
@@ -95,7 +95,7 @@ class _TestDetailsState extends State<TestDetails> {
   }
 
   // Dummy test function (Replace with actual quality test logic)
-  void _testQuality() async{
+  void _testQuality() async {
     if (_images.length >= 3 && _video != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Testing quality...")),
@@ -143,55 +143,58 @@ class _TestDetailsState extends State<TestDetails> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text("Test Crop Quality"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text("Upload at least 3 images of your crop:"),
-            const SizedBox(height: 10),
-            _buildImageList(),
-            ElevatedButton(
-              onPressed: _pickImages,
-              child: const Text("Pick Images"),
-            ),
-            const SizedBox(height: 20),
-            const Text("Upload a video of your crop:"),
-            const SizedBox(height: 10),
-            _video == null
-                ? const Text("No video selected")
-                : _videoController != null &&
-                        _videoController!.value.isInitialized
-                    ? AspectRatio(
-                        aspectRatio: _videoController!.value.aspectRatio,
-                        child: VideoPlayer(_videoController!),
-                      )
-                    : const Text("Loading video..."),
-            ElevatedButton(
-              onPressed: _pickVideo,
-              child: const Text("Pick Video"),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _testQuality,
-              child: const Text("Test Crop Quality"),
-            ),
-            const SizedBox(height: 0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PriceDetails(
-                      cropDetails: widget.cropDetails,
-                      addSaleCallback: widget.addSaleCallback,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text("Upload at least 3 images of your crop:"),
+              const SizedBox(height: 10),
+              _buildImageList(),
+              ElevatedButton(
+                onPressed: _pickImages,
+                child: const Text("Pick Images"),
+              ),
+              const SizedBox(height: 20),
+              const Text("Upload a video of your crop:"),
+              const SizedBox(height: 10),
+              _video == null
+                  ? const Text("No video selected")
+                  : _videoController != null &&
+                          _videoController!.value.isInitialized
+                      ? AspectRatio(
+                          aspectRatio: _videoController!.value.aspectRatio,
+                          child: VideoPlayer(_videoController!),
+                        )
+                      : const Text("Loading video..."),
+              ElevatedButton(
+                onPressed: _pickVideo,
+                child: const Text("Pick Video"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _testQuality,
+                child: const Text("Test Crop Quality"),
+              ),
+              const SizedBox(height: 0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PriceDetails(
+                        cropDetails: widget.cropDetails,
+                        addSaleCallback: widget.addSaleCallback,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: const Text("Next"),
-            ),
-          ],
+                  );
+                },
+                child: const Text("Next"),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:agrimarket/buyer/nav_bar_buyer.dart';
 import 'package:agrimarket/firebase_services/splash_screenService.dart';
 import 'package:agrimarket/screens/nav_bar.dart';
 import 'package:agrimarket/screens/type_screen.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => SplashScreenState();
 }
@@ -17,12 +19,12 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   SplashService splashScreen = SplashService();
   static const String KEYLOGIN = "login";
+  static const String KEYUSERTYPE = "userType";
+
   @override
   void initState() {
     super.initState();
-
     whereToGo();
-    // splashScreen.isLogin(context);
   }
 
   @override
@@ -31,32 +33,33 @@ class SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset('assets/images/greenbg.png'), // Splash screen logo
       ),
-      backgroundColor: Color(0xFFD7FBE8), // Background color
+      backgroundColor: const Color(0xFFD7FBE8), // Background color
     );
   }
 
   Future<void> whereToGo() async {
-    var sharedpref = await SharedPreferences.getInstance();
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    bool? isLoggedIN = sharedPref.getBool(KEYLOGIN);
+    String? userType = sharedPref.getString(KEYUSERTYPE);
 
-    var isLoggedIN = sharedpref.getBool(KEYLOGIN);
-
-    Timer(Duration(seconds: 2), () {
-      if (isLoggedIN != null) {
-        if (isLoggedIN) {
+    // Add a delay to show the splash screen for 2 seconds
+    Timer(const Duration(seconds: 2), () {
+      if (isLoggedIN != null && isLoggedIN) {
+        if (userType == "farmer") {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => NavBar()),
+            MaterialPageRoute(builder: (context) => const NavBar()),
           );
-        } else {
-          Navigator.pop(
+        } else if (userType == "buyer") {
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => TypeScreen()),
+            MaterialPageRoute(builder: (context) => const NavBarBuyer()),
           );
         }
       } else {
-        Navigator.pop(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TypeScreen()),
+          MaterialPageRoute(builder: (context) => const TypeScreen()),
         );
       }
     });
