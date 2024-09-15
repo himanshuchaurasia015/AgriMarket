@@ -16,7 +16,6 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 connectFarmerDB();
-connectBuyerDB();
 
 app.use("/api/farmers", farmerRoutes);
 app.use("/api/buyers", buyerRoutes);

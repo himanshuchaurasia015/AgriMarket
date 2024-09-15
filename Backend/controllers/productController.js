@@ -1,17 +1,16 @@
 const Product = require("../models/Product");
 const Farmer = require("../models/Farmer");
-const multer = require("multer");
 
 // Configure multer for image uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage: storage }).array("images", 5); // Max 5 images
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + "-" + file.originalname);
+//   },
+// });
+// const upload = multer({ storage: storage }).array("images", 5); // Max 5 images
 
 // Create Product
 // Create Product
@@ -24,7 +23,6 @@ const createProduct = async (req, res) => {
       fertilizer,
       pesticides,
       phone,
-      time,
       duration,
       quality,
       minprice,
@@ -32,31 +30,25 @@ const createProduct = async (req, res) => {
       baseprice,
     } = req.body;
 
-    // Get the farmerId from the JWT token (assumed to be in req.user.id)
-
-    // const images = req.files ? req.files.images[0].path : "";
-
-    const newProduct = new Product({
+    const newProduct = await Product.create({
       name,
       type,
       season,
       fertilizer,
       pesticides,
       phone,
-      time,
       duration,
-      // images,
       quality,
       minprice,
       maxprice,
       baseprice,
     });
 
-    await newProduct.save();
     return res
       .status(201)
       .json({ message: "Product created successfully", product: newProduct });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ error: "Failed to create product", details: error.message });

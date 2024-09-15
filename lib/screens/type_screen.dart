@@ -23,7 +23,7 @@ class _TypeScreenState extends State<TypeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => LoginScreen(
-          userType: userType!, // Pass the userType to the next screen
+          // userType: userType!, // Pass the userType to the next screen
         ),
       ),
     );

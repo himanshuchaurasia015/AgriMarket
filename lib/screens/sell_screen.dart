@@ -1,10 +1,11 @@
+
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
 import 'dart:async';
 import 'package:agrimarket/screens/create_new1.dart';
 import 'package:agrimarket/screens/sell_details.dart';
 import 'package:flutter/material.dart';
-
+import 'package:agrimarket/apis/api.dart';
 class SellScreen extends StatefulWidget {
   const SellScreen({super.key});
 
@@ -14,9 +15,30 @@ class SellScreen extends StatefulWidget {
 
 class _SellScreenState extends State<SellScreen> {
   List<Map<String, dynamic>> recentSells = [];
+  List<dynamic> data = [];
   Timer? _timer; // For the countdown timer
   Duration _timeLeft = Duration(); // The remaining time for the current timer
 
+  @override
+  void initState() {
+    super.initState();
+    // Call the function to fetch active products
+    _fetchActiveProducts();
+  }
+
+  // Function to fetch active products from API
+  Future<void> _fetchActiveProducts() async {
+    try {
+      final fetchedData = await getActiveProducts();
+      setState(() {
+        // data = fetchedData;
+        // recentSells = fetchedData.map((item) => item as Map<String, dynamic>).toList();
+      });
+    } catch (e) {
+      // Handle the error if there's an exception
+      print('Error fetching active products: $e');
+    }
+  }
   // Function to add new sale details
   void _addNewSale(Map<String, dynamic> saleDetails) {
     setState(() {
@@ -133,11 +155,11 @@ class _SellScreenState extends State<SellScreen> {
                               children: [
                                 recentSells[index]['image'] != null
                                     ? Image.file(
-                                        recentSells[index]['image'],
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      )
+                                  recentSells[index]['image'],
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                )
                                     : Icon(Icons.image, size: 100),
                                 SizedBox(width: 16),
                                 Text(
