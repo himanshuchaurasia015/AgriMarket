@@ -1,24 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'OTP Verification',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: OtpScreen(),
-    );
-  }
-}
-
 class OtpScreen extends StatefulWidget {
+  final String phoneNumber;
+
+  const OtpScreen({Key? key, required this.phoneNumber}) : super(key: key);
+
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
@@ -40,8 +27,9 @@ class _OtpScreenState extends State<OtpScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Enter the OTP sent to your mobile number',
+              'Enter the OTP sent to ${widget.phoneNumber}',
               style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
             PinCodeTextField(
@@ -74,15 +62,27 @@ class _OtpScreenState extends State<OtpScreen> {
                 // You can add your verification logic here
                 print("OTP Code Completed: $otpCode");
               },
-              appContext: context, // Add this line
+              appContext: context,
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                fixedSize: Size(350, 54),
+              ),
               onPressed: () {
                 // You can add your verification logic here
                 print("Entered OTP Code: $otpCode");
               },
-              child: Text('Verify OTP'),
+              child: Text(
+                'Verify OTP',
+                style: TextStyle(
+                    fontFamily: 'lato',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
             ),
           ],
         ),

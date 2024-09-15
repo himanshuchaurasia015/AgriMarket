@@ -1,8 +1,6 @@
-// ignore_for_file: library_prefixes
-
+import 'package:flutter/material.dart';
 import 'package:agrimarket/screens/otp_screen.dart';
 import 'package:agrimarket/screens/type_screen.dart';
-import 'package:flutter/material.dart';
 
 class LoginScreen2 extends StatefulWidget {
   final String? userType;
@@ -85,7 +83,7 @@ class _LoginScreen2State extends State<LoginScreen2> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => OtpScreen(_phoneController.text),
+          builder: (context) => OtpScreen(phoneNumber: phoneNumber),
         ),
       );
     } catch (e) {

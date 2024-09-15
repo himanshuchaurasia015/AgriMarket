@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:agrimarket/firebase_options.dart';
-import 'package:agrimarket/screens/login_screen2.dart';
+import 'package:agrimarket/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +48,6 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: LoginScreen2());
+        home: SplashScreen());
   }
 }
