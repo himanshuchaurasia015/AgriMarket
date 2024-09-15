@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agrimarket/screens/login_screen2.dart';
 import 'package:flutter/material.dart';
-import 'package:agrimarket/screens/login_screen.dart';
 
 class TypeScreen extends StatefulWidget {
   const TypeScreen({super.key});
@@ -22,7 +22,7 @@ class _TypeScreenState extends State<TypeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginScreen(
+        builder: (context) => LoginScreen2(
           userType: userType!, // Pass the userType to the next screen
         ),
       ),
