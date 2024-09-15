@@ -38,13 +38,15 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> whereToGo() async {
-    SharedPreferences sharedPref = await SharedPreferences.getInstance();
-    bool? isLoggedIN = sharedPref.getBool(KEYLOGIN);
-    String? userType = sharedPref.getString(KEYUSERTYPE);
+    try {
+      SharedPreferences sharedPref = await SharedPreferences.getInstance();
+      bool? isLoggedIN = sharedPref.getBool(KEYLOGIN);
+      String? userType = sharedPref.getString(KEYUSERTYPE);
 
-    // Add a delay to show the splash screen for 2 seconds
-    Timer(const Duration(seconds: 2), () {
-      if (isLoggedIN != null && isLoggedIN) {
+      // Add a delay to show the splash screen for 2 seconds
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (isLoggedIN == true) {
         if (userType == "farmer") {
           Navigator.pushReplacement(
             context,
@@ -55,6 +57,12 @@ class SplashScreenState extends State<SplashScreen> {
             context,
             MaterialPageRoute(builder: (context) => const NavBarBuyer()),
           );
+        } else {
+          // Handle unexpected userType
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TypeScreen()),
+          );
         }
       } else {
         Navigator.pushReplacement(
@@ -62,6 +70,12 @@ class SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => const TypeScreen()),
         );
       }
-    });
+    } catch (e) {
+      print('Error in whereToGo: $e');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TypeScreen()),
+      );
+    }
   }
 }

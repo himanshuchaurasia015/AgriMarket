@@ -33,9 +33,8 @@ const createProduct = async (req, res) => {
     } = req.body;
 
     // Get the farmerId from the JWT token (assumed to be in req.user.id)
-    const farmerId = req.user.id;
 
-    const images = req.files ? req.files.images[0].path : "";
+    // const images = req.files ? req.files.images[0].path : "";
 
     const newProduct = new Product({
       name,
@@ -46,12 +45,11 @@ const createProduct = async (req, res) => {
       phone,
       time,
       duration,
-      images,
+      // images,
       quality,
       minprice,
       maxprice,
       baseprice,
-      farmerId,
     });
 
     await newProduct.save();
@@ -72,12 +70,10 @@ getActiveProducts = async (req, res) => {
 
     return res.status(200).json(products);
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        error: "Failed to fetch active products",
-        details: error.message,
-      });
+    return res.status(500).json({
+      error: "Failed to fetch active products",
+      details: error.message,
+    });
   }
 };
 
