@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_auth_project/home.dart';
+import 'package:agrimarket/auth/login.dart';
 import 'package:pinput/pinput.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -48,9 +48,9 @@ class _OTPScreenState extends State<OTPScreen> {
             child: Pinput(
               length: 6,
               defaultPinTheme: defaultPinTheme,
-             
+
               controller: _pinPutController,
-           
+
               pinAnimationType: PinAnimationType.fade,
               onSubmitted: (pin) async {
                 try {
@@ -67,7 +67,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   });
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                 
+
                 }
               },
             ),
@@ -79,7 +79,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
   _verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+1${widget.phone}',
+        phoneNumber: '+91${widget.phone}',
         verificationCompleted: (PhoneAuthCredential credential) async {
           await FirebaseAuth.instance
               .signInWithCredential(credential)
