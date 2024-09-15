@@ -14,7 +14,7 @@ Future<http.Response> createProduct(
     String maxprice,
     String baseprice
     ) async {
-  final url = Uri.parse('https://rjgfw0b2-5000.inc1.devtunnels.ms/api/products/create');
+  final url = Uri.parse('http://10.0.2.2:5000/api/products/create');
 
   // Creating JSON data to send in the request body
   var body = jsonEncode({
@@ -49,7 +49,7 @@ Future<http.Response> createProduct(
 }
 
 Future<void> getFarmerProducts(String token) async {
-  final url = Uri.parse('https://rjgfw0b2-5000.inc1.devtunnels.ms/api/products/my-products');
+  final url = Uri.parse('http://10.0.2.2:5000/api/products/my-products');
 
   var response = await http.get(url, headers: {
     'Authorization': 'Bearer $token',
@@ -66,7 +66,7 @@ Future<void> getFarmerProducts(String token) async {
 
 
 Future<void> deactivateProduct(String productId, String token) async {
-  final url = Uri.parse('https://rjgfw0b2-5000.inc1.devtunnels.ms/api/products/deactivate/$productId');
+  final url = Uri.parse('http://10.0.2.2:5000/api/products/deactivate/$productId');
 
   var response = await http.put(url, headers: {
     'Authorization': 'Bearer $token',
@@ -80,7 +80,7 @@ Future<void> deactivateProduct(String productId, String token) async {
 }
 
 Future<List<Map<String, dynamic>>> getActiveProducts() async {
-  final url = Uri.parse('https://rjgfw0b2-5000.inc1.devtunnels.ms/api/products/active');
+  final url = Uri.parse('http://10.0.2.2:5000/api/products/active');
   // http://10.0.2.2:5000
   var response = await http.get(url);
 

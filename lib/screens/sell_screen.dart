@@ -30,6 +30,8 @@ class _SellScreenState extends State<SellScreen> {
   Future<void> _fetchActiveProducts() async {
     try {
       final fetchedData = await getActiveProducts();
+      recentSells=fetchedData;
+      // print(recentSells,fetchedData);
       setState(() {
         // data = fetchedData;
         // recentSells = fetchedData.map((item) => item as Map<String, dynamic>).toList();

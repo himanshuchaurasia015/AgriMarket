@@ -103,37 +103,23 @@
 //   _verifyPhone() async {
 //     print("processing-----------------------");
 //     await FirebaseAuth.instance.verifyPhoneNumber(
-//         phoneNumber: '+91${widget.phoneNumber}',
-//         verificationCompleted: (PhoneAuthCredential credential) async {
-//           await FirebaseAuth.instance
-//               .signInWithCredential(credential)
-//               .then((value) async {
-//             if (value.user != null) {
-//               Navigator.pushAndRemoveUntil(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => NavBar()),
-//                       (route) => false);
-//             }
-//           });
-//         },
-//         verificationFailed: (FirebaseAuthException e) {
-//           print(e.message);
-//         },
-//         codeSent: (String? verficationID, int? resendToken) {
-//           setState(() {
-//             _verificationCode = verficationID;
-//           });
-//         },
-//         codeAutoRetrievalTimeout: (String verificationID) {
-//           setState(() {
-//             _verificationCode = verificationID;
-//           });
-//         },
-//         timeout: Duration(seconds: 120));
+//       phoneNumber: widget.phoneNumber,
+//       timeout: const Duration(seconds: 60),
+//       verificationCompleted: (PhoneAuthCredential credential) {},
+//       verificationFailed: (FirebaseAuthException e) {
+//         if (e.code == 'invalid-phone-number') {
+//           print('The provided phone number is not valid.');
+//         }
+//       },
+//       codeSent: (String verificationId, int? resendToken) {},
+//       codeAutoRetrievalTimeout: (String verificationId) {},
+//     );
 //   }
 //
 // }
-
+//
+//
+//
 
 
 
@@ -207,7 +193,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 setState(() {
                   otpCode = value;
                 });
-                print("OTP Code Completed: $otpCode");
+                _verifyOtp();
               },
               appContext: context,
             ),
@@ -219,32 +205,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     borderRadius: BorderRadius.circular(5)),
                 fixedSize: Size(350, 54),
               ),
-              onPressed: () async {
-                try {
-                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                    verificationId: _verificationCode!,
-                    smsCode: otpCode,
-                  );
-
-                  // Sign in with the OTP credential
-                  UserCredential result = await FirebaseAuth.instance
-                      .signInWithCredential(credential);
-
-                  if (result.user != null) {
-                    // Navigate to NavBar screen after successful verification
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => NavBar()),
-                          (route) => false,
-                    );
-                  }
-                } catch (e) {
-                  print("Error verifying OTP: $e");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invalid OTP. Please try again.')),
-                  );
-                }
-              },
+              onPressed: _verifyOtp,
               child: Text(
                 'Verify OTP',
                 style: TextStyle(
@@ -259,13 +220,14 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  // Function to send the OTP
   _verifyPhone() async {
     print("processing-----------------------");
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+91${widget.phoneNumber}',
+      timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
+        // If the code is auto-retrieved, this block will be called.
+        await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
           if (value.user != null) {
             Navigator.pushAndRemoveUntil(
               context,
@@ -276,19 +238,54 @@ class _OtpScreenState extends State<OtpScreen> {
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        print("Verification Failed: ${e.message}");
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
       },
-      codeSent: (String? verificationID, int? resendToken) {
+      codeSent: (String verificationId, int? resendToken) {
         setState(() {
-          _verificationCode = verificationID;
+          _verificationCode = verificationId;
         });
       },
-      codeAutoRetrievalTimeout: (String verificationID) {
+      codeAutoRetrievalTimeout: (String verificationId) {
         setState(() {
-          _verificationCode = verificationID;
+          _verificationCode = verificationId;
         });
       },
-      timeout: Duration(seconds: 120),
     );
+  }
+
+  void _verifyOtp() async {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => NavBar()),
+          (route) => false,
+    );
+    if (otpCode.isNotEmpty && _verificationCode != null) {
+      try {
+        // Create a PhoneAuthCredential using the verification code
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: _verificationCode!,
+          smsCode: otpCode,
+        );
+
+        // Sign in using the credential
+        await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+          if (value.user != null) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => NavBar()),
+                  (route) => false,
+            );
+          }
+        });
+      } catch (e) {
+        print("OTP Verification Failed: $e");
+        // Show error message if needed
+      }
+    } else {
+      print("Invalid OTP or verification code is null");
+    }
   }
 }

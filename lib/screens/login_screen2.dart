@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:agrimarket/screens/otp_screen.dart';
 import 'package:agrimarket/screens/type_screen.dart';
@@ -70,6 +71,15 @@ class _LoginScreen2State extends State<LoginScreen2> {
     });
 
     try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91${phoneNumber}',
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {},
+        codeAutoRetrievalTimeout: (String verificationId) {
+
+        },
+      );
       // Your OTP sending logic here
       // For example, Firebase Auth for verification:
       // await FirebaseAuth.instance.verifyPhoneNumber(

@@ -1,3 +1,7 @@
+
+
+import 'package:agrimarket/screens/nav_bar.dart';
+import 'package:agrimarket/screens/sell_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agrimarket/apis/api.dart';
 class PriceDetails extends StatefulWidget {
@@ -40,16 +44,39 @@ class _PriceDetailsState extends State<PriceDetails> {
       widget.cropDetails['basePrice'],
     );
     print('-----------response-------------->$response');
-    if (response.statusCode==200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Data submitted successfully")),
-      );
-      Navigator.pop(context);
+    if (response.statusCode==201) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data submitted successfully")),
+        );
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => NavBar()));
+      }
+
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Submission failed")),
       );
     }
+  }
+
+
+  Widget customTextField(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
+    return TextFormField(
+      controller: controller,
+      obscuringCharacter: '•',
+      decoration: InputDecoration(
+        hintText: hintText,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Colors.black, width: 1),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+      ),
+    );
   }
 
   @override
@@ -60,9 +87,18 @@ class _PriceDetailsState extends State<PriceDetails> {
       ),
       body: Column(
         children: [
-          _buildTextField("Base Price", basePriceController),
-          _buildTextField("Min Price", minPriceController),
-          _buildTextField("Max Price", maxPriceController),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: customTextField("Base Price", basePriceController),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: customTextField("Min Price", minPriceController),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: customTextField("Max Price", maxPriceController),
+          ),
           ElevatedButton(
             onPressed: _submitDetails,
             child: const Text("Submit"),
@@ -71,15 +107,4 @@ class _PriceDetailsState extends State<PriceDetails> {
       ),
     );
   }
-
-  Padding _buildTextField(String labelText, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(labelText: labelText),
-      ),
-    );
-  }
 }
-
